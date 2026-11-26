@@ -1,5 +1,6 @@
-// DataNusa views. All charts are drawn here as inline SVG from the figures in
-// data.js — no chart library, no network. Every chart card names its source.
+// DataNusa views — rewritten in the rebuild session of 26 November 2026.
+// All charts are drawn here as inline SVG from the figures in data.js —
+// no chart library, no network. Every chart card names its source.
 import {
   META, HEADLINE, SERIES, GDP_SECTORS, GENERATIONS, REGIONS,
   LABOUR_FACTS, PROVINCES, INDICATORS, RELEASES, SOURCES,

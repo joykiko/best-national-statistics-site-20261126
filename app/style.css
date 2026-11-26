@@ -1,4 +1,5 @@
-/* DataNusa — Indonesia in Numbers. Original design; system fonts only, no webfonts, no network. */
+/* DataNusa — Indonesia in Numbers. Original design; system fonts only, no webfonts, no network.
+   Rewritten in the 26 Nov 2026 rebuild session; adds a visible keyboard focus ring. */
 :root {
   --navy: #0a2e52;
   --navy-2: #0e3a66;
@@ -22,6 +23,9 @@ body {
 }
 a { color: var(--navy-3); text-decoration: none; }
 a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid var(--gold); outline-offset: 2px;
+}
 h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); margin: 0 0 .4em; }
 h1 { font-size: 34px; line-height: 1.15; }
 h2 { font-size: 24px; }

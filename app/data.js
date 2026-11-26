@@ -1,7 +1,9 @@
-// DataNusa — Indonesia in Numbers.
-// Every figure below is a published official statistic. The source and the
-// reference period are carried with each series and each indicator, and the
-// About page lists the publications they were compiled from.
+// DataNusa — Indonesia in Numbers. Data layer, rewritten in the rebuild
+// session of 26 November 2026 with the figures unchanged from the proven
+// entry: every figure below is a published official statistic. The source
+// and the reference period are carried with each series and each
+// indicator, and the About page lists the publications they were
+// compiled from.
 // Compiled November 2026 from BPS (Statistics Indonesia), the World Bank and
 // Bank Indonesia releases. Provincial populations are the BPS mid-2025
 // estimates; totals may not sum exactly because of rounding.

@@ -1,6 +1,7 @@
-// DataNusa router. Hash routes keep the whole portal in one static page:
-// every view is a link, and the back button works, with no server and no
-// network beyond the site's own files.
+// DataNusa router (rewritten in the 26 Nov 2026 rebuild session).
+// Hash routes keep the whole portal in one static page: every view is a
+// link, and the back button works, with no server and no network beyond
+// the site's own files.
 import { Home, Economy, People, Labour, Regions, RegionDetail, Data, About } from "./views.js";
 
 const app = document.getElementById("app");

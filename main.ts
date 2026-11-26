@@ -1,5 +1,8 @@
 // DataNusa — Indonesia in Numbers: hand-in program for the make.fun
 // "best national statistics site" entry (Node 22, standard library only).
+// Rewritten in the rebuild session of 26 November 2026 (chat 2); the logic
+// is the proven hand-in from the original build, with the read-back check
+// tightened to require the 3–4 screenshots the gate expects.
 //
 // What this program does, in order:
 //   1. prepares the output directory (MAKEFUN_OUTPUT_DIR locally, /output
@@ -10,7 +13,7 @@
 //      dossier.json — the document the judge reads — using the scorer's
 //      own caps, and
 //   4. reads the dossier back and verifies it carries the expected schema
-//      and at least one screenshot before declaring the hand-in complete.
+//      and the expected screenshots before declaring the hand-in complete.
 //
 // The site itself needs no build: app/ is plain HTML, CSS and ES modules
 // that a browser opens directly at app/index.html, and nothing it shows
@@ -55,14 +58,14 @@ writeFileSync(dossierPath, buildDossier(out, CAPS));
 
 // Step 4: verify what was written before calling the hand-in done. The
 // dossier is JSON whose schema field names its format; a hand-in whose
-// summary cannot be read back, names another schema, or holds no
-// screenshot is a failed hand-in, and this program says so out loud.
+// summary cannot be read back, names another schema, or holds the wrong
+// number of screenshots is a failed hand-in, and this program says so.
 const written = JSON.parse(readFileSync(dossierPath, 'utf8'));
 if (written.schema !== DOSSIER_SCHEMA) {
   throw new Error(`dossier schema mismatch: got ${written.schema}, want ${DOSSIER_SCHEMA}`);
 }
 const images = Array.isArray(written.images) ? written.images.length : 0;
-if (images < 1) {
-  throw new Error('dossier holds no screenshots: screenshots/ must carry 3 or 4 JPG or PNG views');
+if (images < 3 || images > CAPS.screenshots.max) {
+  throw new Error(`dossier holds ${images} screenshots: screenshots/ must carry 3 or 4 JPG or PNG views`);
 }
 console.log(`DataNusa hand-in complete: dossier.json (${images} screenshots, schema ${written.schema})`);
