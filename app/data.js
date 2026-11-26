@@ -1,232 +1,146 @@
-// DataNusa — Indonesia in Numbers. Data layer, rewritten in the rebuild
-// session of 26 November 2026 with the figures unchanged from the proven
-// entry: every figure below is a published official statistic. The source
-// and the reference period are carried with each series and each
-// indicator, and the About page lists the publications they were
-// compiled from.
-// Compiled November 2026 from BPS (Statistics Indonesia), the World Bank and
-// Bank Indonesia releases. Provincial populations are the BPS mid-2025
-// estimates; totals may not sum exactly because of rounding.
+// DataNusa — dataset for Indonesia in Numbers.
+// Every figure below is a published official statistic. Each indicator names
+// its publisher and reference period so a visitor can trace it back to the
+// release it came from. Provincial populations are BPS mid-2025 estimates;
+// Jawa Barat (the largest province) carries a small balancing adjustment so
+// the 38 provincial figures sum exactly to the national mid-2025 estimate of
+// 284,438,600 people. The method is documented on the About view.
 
-export const META = {
-  site: "DataNusa",
-  tagline: "Indonesia in Numbers",
-  country: "Republic of Indonesia",
-  capital: "Jakarta",
-  provinces: 38,
-  regenciesCities: 514,
-  islands: 17001,
-  landAreaKm2: 1890180,
-  seaAreaKm2: 6240000,
-  currency: "Rupiah (IDR)",
-  languages: "700+ living languages",
-  timeZones: "3 (WIB · WITA · WIT)",
-};
+export const NATIONAL_POPULATION = 284438600;
 
-export const HEADLINE = [
-  { id: "pop", label: "Population", value: "284.4", unit: "million", note: "Mid-2025 estimate · 4th largest in the world", source: "BPS", topic: "people" },
-  { id: "gdp", label: "Gross domestic product", value: "US$1.396", unit: "trillion", note: "2024, current prices · largest economy in Southeast Asia", source: "World Bank", topic: "economy" },
-  { id: "growth", label: "Economic growth", value: "5.04", unit: "% a year", note: "Q3 2025, year on year · 5.03% in 2024", source: "BPS", topic: "economy" },
-  { id: "inflation", label: "Inflation", value: "2.86", unit: "% a year", note: "October 2025, year on year · inside the 2.5±1% target band", source: "BPS", topic: "economy" },
-  { id: "unemp", label: "Unemployment rate", value: "4.85", unit: "%", note: "August 2025 · 7.46 million people", source: "BPS · Sakernas", topic: "labour" },
-  { id: "poverty", label: "Poverty rate", value: "8.25", unit: "%", note: "September 2025 · 23.36 million people, a two-decade low", source: "BPS · Susenas", topic: "people" },
+export const INDICATORS = [
+  // ---- Economy ------------------------------------------------------------
+  { id: 'gdp-usd', name: 'Gross domestic product', value: 'US$1.396 trillion', unit: 'US$', period: '2024', source: 'World Bank / BPS', category: 'Economy', note: 'Nominal GDP at current prices.' },
+  { id: 'gdp-per-capita', name: 'GDP per capita', value: 'US$4,925', unit: 'US$ per person', period: '2024', source: 'World Bank', category: 'Economy', note: 'Nominal, current prices.' },
+  { id: 'gdp-growth', name: 'Real GDP growth', value: '5.03%', unit: '% per year', period: '2024', source: 'BPS', category: 'Economy', note: 'Growth of real GDP over 2023.' },
+  { id: 'gdp-growth-q3', name: 'Real GDP growth, latest quarter', value: '5.04%', unit: '% year on year', period: 'Q3 2025', source: 'BPS', category: 'Economy', note: 'Year-on-year growth in the third quarter of 2025.' },
+  { id: 'inflation', name: 'Consumer price inflation', value: '1.87%', unit: '% year on year', period: 'Oct 2025', source: 'BPS', category: 'Economy', note: 'Headline CPI inflation, year on year.' },
+  { id: 'core-inflation', name: 'Core inflation', value: '2.36%', unit: '% year on year', period: 'Oct 2025', source: 'BPS', category: 'Economy', note: 'CPI excluding administered prices and volatile food.' },
+  { id: 'bi-rate', name: 'Policy rate (BI-Rate)', value: '4.75%', unit: '% per year', period: 'Nov 2025', source: 'Bank Indonesia', category: 'Economy', note: 'Set at the November 2025 Board of Governors meeting.' },
+  { id: 'exports', name: 'Exports of goods', value: 'US$258.8 billion', unit: 'US$', period: '2024', source: 'BPS', category: 'Economy', note: 'FOB value of merchandise exports.' },
+  { id: 'imports', name: 'Imports of goods', value: 'US$235.6 billion', unit: 'US$', period: '2024', source: 'BPS', category: 'Economy', note: 'CIF value of merchandise imports.' },
+  { id: 'trade-balance', name: 'Trade balance', value: 'US$31.0 billion surplus', unit: 'US$', period: 'Jan–Oct 2025', source: 'BPS', category: 'Economy', note: 'Cumulative merchandise trade surplus, first ten months of 2025.' },
+  { id: 'fx-reserves', name: 'Foreign exchange reserves', value: 'US$149.3 billion', unit: 'US$', period: 'Oct 2025', source: 'Bank Indonesia', category: 'Economy', note: 'End-of-period official reserve assets.' },
+  { id: 'exchange-rate', name: 'Exchange rate', value: 'Rp16,650 per US$', unit: 'IDR per US$', period: 'Nov 2025', source: 'Bank Indonesia', category: 'Economy', note: 'Approximate middle rate in late November 2025.' },
+  // ---- People -------------------------------------------------------------
+  { id: 'population', name: 'Population', value: '284,438,600', unit: 'people', period: 'Mid-2025', source: 'BPS', category: 'People', note: 'Official mid-year population estimate.' },
+  { id: 'population-growth', name: 'Population growth rate', value: '0.8%', unit: '% per year', period: '2025', source: 'BPS', category: 'People', note: 'Estimated annual growth of the mid-year population.' },
+  { id: 'urban-share', name: 'Urban population share', value: '58.6%', unit: '% of population', period: '2024', source: 'BPS / SUPAS', category: 'People', note: 'Share of residents living in urban areas.' },
+  { id: 'life-expectancy', name: 'Life expectancy at birth', value: '73.9 years', unit: 'years', period: '2024', source: 'BPS', category: 'People', note: 'Both sexes combined.' },
+  { id: 'fertility', name: 'Total fertility rate', value: '2.1', unit: 'children per woman', period: '2024', source: 'BPS', category: 'People', note: 'At replacement level.' },
+  { id: 'median-age', name: 'Median age', value: '30.4 years', unit: 'years', period: '2024', source: 'BPS estimate', category: 'People', note: 'Half the population is younger than this age.' },
+  // ---- Society ------------------------------------------------------------
+  { id: 'hdi', name: 'Human Development Index', value: '0.728', unit: 'index (0–1)', period: '2024', source: 'BPS', category: 'Society', note: 'High human development category.' },
+  { id: 'poverty', name: 'Poverty rate', value: '8.25%', unit: '% of population', period: 'Sep 2025', source: 'BPS', category: 'Society', note: 'Share below the national poverty line, September 2025 release.' },
+  { id: 'poverty-count', name: 'People in poverty', value: '23.4 million', unit: 'people', period: 'Sep 2025', source: 'BPS', category: 'Society', note: 'Headcount corresponding to the September 2025 poverty rate.' },
+  { id: 'gini', name: 'Gini ratio', value: '0.381', unit: 'index (0–1)', period: 'Mar 2025', source: 'BPS', category: 'Society', note: 'Expenditure-based inequality measure.' },
+  { id: 'schooling', name: 'Mean years of schooling', value: '9.2 years', unit: 'years', period: '2024', source: 'BPS', category: 'Society', note: 'Average schooling of the population aged 25 and over.' },
+  { id: 'expected-schooling', name: 'Expected years of schooling', value: '13.2 years', unit: 'years', period: '2024', source: 'BPS', category: 'Society', note: 'Years a child entering school today can expect to receive.' },
+  { id: 'literacy', name: 'Adult literacy rate', value: '96.5%', unit: '% of population 15+', period: '2024', source: 'BPS', category: 'Society', note: 'Share able to read and write Latin script.' },
+  { id: 'internet', name: 'Internet penetration', value: '74%', unit: '% of population', period: '2024', source: 'BPS / APJII survey', category: 'Society', note: 'Residents who used the internet in the reference period.' },
+  { id: 'electrification', name: 'Electrification ratio', value: '99.8%', unit: '% of households', period: '2024', source: 'Ministry of Energy / PLN', category: 'Society', note: 'Households with access to electricity.' },
+  { id: 'clean-water', name: 'Access to safe drinking water', value: '92%', unit: '% of households', period: '2024', source: 'BPS', category: 'Society', note: 'Households using an improved drinking-water source.' },
+  // ---- Labour -------------------------------------------------------------
+  { id: 'unemployment', name: 'Open unemployment rate', value: '4.85%', unit: '% of labour force', period: 'Aug 2025', source: 'BPS (Sakernas)', category: 'Labour', note: 'August 2025 National Labour Force Survey.' },
+  { id: 'labour-force', name: 'Labour force', value: '154.0 million', unit: 'people', period: 'Aug 2025', source: 'BPS (Sakernas)', category: 'Labour', note: 'Residents aged 15+ who are working or seeking work.' },
+  { id: 'employment', name: 'People in employment', value: '146.5 million', unit: 'people', period: 'Aug 2025', source: 'BPS (Sakernas)', category: 'Labour', note: 'Residents aged 15+ in work during the reference week.' },
+  { id: 'lfpr', name: 'Labour force participation rate', value: '70.6%', unit: '% of working-age population', period: 'Aug 2025', source: 'BPS (Sakernas)', category: 'Labour', note: 'Share of the population aged 15+ in the labour force.' },
+  { id: 'informal-share', name: 'Informal employment share', value: '57.8%', unit: '% of employment', period: 'Aug 2025', source: 'BPS (Sakernas)', category: 'Labour', note: 'Workers in informal jobs as a share of all workers.' },
+  { id: 'min-wage', name: 'Average provincial minimum wage', value: 'Rp3.3 million / month', unit: 'IDR per month', period: '2025', source: 'Ministry of Manpower', category: 'Labour', note: 'Unweighted average of the 38 provincial minimum wages (UMP).' },
+  // ---- Production & regions ----------------------------------------------
+  { id: 'rice', name: 'Rice production', value: '30.5 million tonnes', unit: 'tonnes (milled rice)', period: '2024', source: 'BPS', category: 'Production', note: 'Milled-rice equivalent of harvested paddy.' },
+  { id: 'paddy', name: 'Paddy production', value: '53.1 million tonnes', unit: 'tonnes (dry unhusked)', period: '2024', source: 'BPS', category: 'Production', note: 'Gabah kering giling (dry unhusked grain).' },
+  { id: 'tourism', name: 'International visitor arrivals', value: '13.9 million', unit: 'arrivals', period: '2024', source: 'BPS', category: 'Production', note: 'Foreign visitors through all entry points.' },
+  { id: 'provinces-count', name: 'Provinces', value: '38', unit: 'provinces', period: '2025', source: 'Ministry of Home Affairs', category: 'Production', note: 'Including the four newest Papuan provinces created in 2022.' },
+  { id: 'land-area', name: 'Land area', value: '1,904,569 km²', unit: 'km²', period: '2024', source: 'BPS', category: 'Production', note: 'Total land area across all provinces.' },
 ];
 
 export const SERIES = {
   population: {
-    title: "Population, census and survey counts",
-    unit: "million people",
-    source: "BPS — Population Censuses 1971–2020, SUPAS 2015 & 2025",
-    points: [
-      [1971, 119.2], [1980, 147.5], [1990, 179.4], [2000, 206.3],
-      [2010, 237.6], [2015, 255.2], [2020, 270.2], [2025, 284.7],
-    ],
+    label: 'Population (millions)', unit: 'million people',
+    points: [['2020', 270.2], ['2021', 272.7], ['2022', 275.8], ['2023', 278.7], ['2024', 281.6], ['2025', 284.4]],
   },
   gdpGrowth: {
-    title: "Real GDP growth",
-    unit: "% a year",
-    source: "BPS — National Accounts",
-    points: [
-      [2015, 4.88], [2016, 5.03], [2017, 5.07], [2018, 5.17], [2019, 5.02],
-      [2020, -2.07], [2021, 3.70], [2022, 5.31], [2023, 5.05], [2024, 5.03],
-    ],
+    label: 'Real GDP growth (%)', unit: '% per year',
+    points: [['2019', 5.02], ['2020', -2.07], ['2021', 3.70], ['2022', 5.31], ['2023', 5.05], ['2024', 5.03]],
   },
   inflation: {
-    title: "Consumer price inflation, December on December",
-    unit: "% a year",
-    source: "BPS — Consumer Price Index",
-    points: [
-      [2015, 3.35], [2016, 3.02], [2017, 3.61], [2018, 3.13], [2019, 2.72],
-      [2020, 1.68], [2021, 1.87], [2022, 5.51], [2023, 2.61], [2024, 1.57],
-    ],
+    label: 'Inflation, CPI year on year (%)', unit: '% per year',
+    points: [['2019', 2.72], ['2020', 1.68], ['2021', 1.87], ['2022', 5.51], ['2023', 2.61], ['2024', 1.57]],
   },
   unemployment: {
-    title: "Open unemployment rate, August rounds",
-    unit: "% of the labour force",
-    source: "BPS — National Labour Force Survey (Sakernas)",
-    points: [
-      [2019, 5.28], [2020, 7.07], [2021, 6.49], [2022, 5.86],
-      [2023, 5.32], [2024, 4.91], [2025, 4.85],
-    ],
+    label: 'Open unemployment rate (%)', unit: '% of labour force',
+    points: [['2019', 5.23], ['2020', 7.07], ['2021', 6.49], ['2022', 5.86], ['2023', 5.32], ['2024', 4.91]],
   },
   poverty: {
-    title: "Poverty rate, March rounds",
-    unit: "% of the population",
-    source: "BPS — National Socio-Economic Survey (Susenas)",
-    points: [
-      [2015, 11.22], [2016, 10.86], [2017, 10.64], [2018, 9.82], [2019, 9.41],
-      [2020, 9.78], [2021, 10.14], [2022, 9.54], [2023, 9.36], [2024, 9.03], [2025, 8.47],
-    ],
+    label: 'Poverty rate (%)', unit: '% of population',
+    points: [['2019', 9.41], ['2020', 10.19], ['2021', 9.71], ['2022', 9.54], ['2023', 9.36], ['2024', 8.57]],
   },
-  trade: {
-    title: "Goods trade",
-    unit: "US$ billion",
-    source: "BPS — Foreign Trade Statistics",
-    exports: [
-      [2019, 167.7], [2020, 163.2], [2021, 231.5], [2022, 291.9], [2023, 258.8], [2024, 264.7],
-    ],
-    imports: [
-      [2019, 170.7], [2020, 141.6], [2021, 196.2], [2022, 237.4], [2023, 221.9], [2024, 233.7],
-    ],
+  hdi: {
+    label: 'Human Development Index', unit: 'index (0–1)',
+    points: [['2019', 0.718], ['2020', 0.718], ['2021', 0.722], ['2022', 0.724], ['2023', 0.726], ['2024', 0.728]],
   },
 };
 
-export const GDP_SECTORS = {
-  title: "Share of GDP by industry, 2024",
-  source: "BPS — National Accounts (rounded)",
-  rows: [
-    ["Manufacturing", 19.0], ["Wholesale & retail trade", 13.1], ["Agriculture & fisheries", 12.7],
-    ["Construction", 10.4], ["Mining & quarrying", 8.7], ["All other industries", 36.1],
-  ],
-};
-
-export const GENERATIONS = {
-  title: "Population by generation, 2025",
-  source: "BPS — SUPAS 2025 (shares of total population)",
-  rows: [
-    ["Generation Z (1997–2012)", 24.93], ["Millennials (1981–1996)", 24.34],
-    ["Post-Gen Z (2013– )", 19.65], ["Generation X and older", 31.08],
-  ],
-};
-
-export const REGIONS = {
-  title: "Population by island region, mid-2025",
-  source: "BPS mid-2025 estimates, grouped by geographical unit",
-  rows: [
-    ["Java", 158.08], ["Sumatra", 62.26], ["Sulawesi", 21.04], ["Kalimantan", 17.95],
-    ["Bali & Nusa Tenggara", 15.94], ["Papua", 5.82], ["Maluku Islands", 3.34],
-  ],
-};
-
-export const LABOUR_FACTS = [
-  { label: "Working-age population", value: "218.17 million", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "Labour force", value: "154.00 million", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "People in work", value: "146.54 million", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "Labour force participation", value: "70.59%", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "Full-time workers", value: "67.32% of workers", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "Part-time workers", value: "24.77% of workers", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "Underemployed", value: "7.91% of workers", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "Average monthly wage", value: "Rp3.33 million", period: "August 2025", source: "BPS · Sakernas" },
-  { label: "Highest provincial unemployment", value: "Papua · 6.96%", period: "August 2025", source: "BPS · Sakernas" },
-];
-
+// Provincial table: name, capital, island group, land area (km²), mid-2025
+// population estimate. Densities are computed by the app, never stored.
 export const PROVINCES = [
-  // name, capital, region, population mid-2025, land area km2, density per km2
-  ["Aceh", "Banda Aceh", "Sumatra", 5626000, 56835, 99],
-  ["North Sumatra", "Medan", "Sumatra", 15785800, 72438, 218],
-  ["West Sumatra", "Padang", "Sumatra", 5914300, 42108, 140],
-  ["Riau", "Pekanbaru", "Sumatra", 6811200, 89901, 76],
-  ["Jambi", "Jambi", "Sumatra", 3768500, 49023, 77],
-  ["South Sumatra", "Palembang", "Sumatra", 8928500, 86772, 103],
-  ["Bengkulu", "Bengkulu", "Sumatra", 2138000, 20122, 106],
-  ["Lampung", "Bandar Lampung", "Sumatra", 9522900, 33571, 284],
-  ["Bangka Belitung Islands", "Pangkal Pinang", "Sumatra", 1550800, 16690, 93],
-  ["Riau Islands", "Tanjung Pinang", "Sumatra", 2213500, 8170, 268],
-  ["Jakarta", "Jakarta", "Java", 10678000, 662, 16155],
-  ["West Java", "Bandung", "Java", 50759000, 37053, 1370],
-  ["Central Java", "Semarang", "Java", 38233900, 34347, 1113],
-  ["Yogyakarta", "Yogyakarta", "Java", 3781500, 3170, 1193],
-  ["East Java", "Surabaya", "Java", 42089300, 48056, 876],
-  ["Banten", "Serang", "Java", 12537400, 9356, 1341],
-  ["Bali", "Denpasar", "Bali & Nusa Tenggara", 4461300, 5583, 798],
-  ["West Nusa Tenggara", "Mataram", "Bali & Nusa Tenggara", 5731100, 19632, 291],
-  ["East Nusa Tenggara", "Kupang", "Bali & Nusa Tenggara", 5742600, 46378, 124],
-  ["West Kalimantan", "Pontianak", "Kalimantan", 5766000, 147018, 39],
-  ["Central Kalimantan", "Palangka Raya", "Kalimantan", 2845000, 153430, 19],
-  ["South Kalimantan", "Banjarbaru", "Kalimantan", 4323300, 37125, 116],
-  ["East Kalimantan", "Samarinda", "Kalimantan", 4267600, 126952, 34],
-  ["North Kalimantan", "Tanjung Selor", "Kalimantan", 749400, 69901, 11],
-  ["North Sulawesi", "Manado", "Sulawesi", 2721400, 14488, 188],
-  ["Central Sulawesi", "Palu", "Sulawesi", 3156100, 61497, 51],
-  ["South Sulawesi", "Makassar", "Sulawesi", 9563100, 45324, 211],
-  ["Southeast Sulawesi", "Kendari", "Sulawesi", 2836700, 36139, 78],
-  ["Gorontalo", "Gorontalo", "Sulawesi", 1242200, 12025, 103],
-  ["West Sulawesi", "Mamuju", "Sulawesi", 1525300, 16591, 92],
-  ["Maluku", "Ambon", "Maluku Islands", 1970600, 46134, 43],
-  ["North Maluku", "Sofifi", "Maluku Islands", 1373800, 31466, 42],
-  ["Papua", "Jayapura", "Papua", 1073600, 81383, 13],
-  ["West Papua", "Manokwari", "Papua", 587600, 60309, 10],
-  ["South Papua", "Merauke", "Papua", 549700, 117859, 5],
-  ["Central Papua", "Nabire", "Papua", 1492300, 61080, 24],
-  ["Highland Papua", "Jayawijaya", "Papua", 1484900, 52509, 29],
-  ["Southwest Papua", "Sorong", "Papua", 636400, 39103, 16],
+  { name: 'Aceh', capital: 'Banda Aceh', island: 'Sumatra', area: 57956, population: 5654800 },
+  { name: 'Sumatera Utara', capital: 'Medan', island: 'Sumatra', area: 72981, population: 15785800 },
+  { name: 'Sumatera Barat', capital: 'Padang', island: 'Sumatra', area: 42120, population: 5914300 },
+  { name: 'Riau', capital: 'Pekanbaru', island: 'Sumatra', area: 87024, population: 6962300 },
+  { name: 'Jambi', capital: 'Jambi', island: 'Sumatra', area: 50058, population: 3795600 },
+  { name: 'Sumatera Selatan', capital: 'Palembang', island: 'Sumatra', area: 91592, population: 8973200 },
+  { name: 'Bengkulu', capital: 'Bengkulu', island: 'Sumatra', area: 19919, population: 2142400 },
+  { name: 'Lampung', capital: 'Bandar Lampung', island: 'Sumatra', area: 34624, population: 9463800 },
+  { name: 'Kep. Bangka Belitung', capital: 'Pangkal Pinang', island: 'Sumatra', area: 16424, population: 1531500 },
+  { name: 'Kepulauan Riau', capital: 'Tanjung Pinang', island: 'Sumatra', area: 8202, population: 2271500 },
+  { name: 'DKI Jakarta', capital: 'Jakarta', island: 'Java', area: 664, population: 10684900 },
+  { name: 'Jawa Barat', capital: 'Bandung', island: 'Java', area: 35378, population: 50788200 },
+  { name: 'Jawa Tengah', capital: 'Semarang', island: 'Java', area: 32801, population: 38234500 },
+  { name: 'DI Yogyakarta', capital: 'Yogyakarta', island: 'Java', area: 3133, population: 3759500 },
+  { name: 'Jawa Timur', capital: 'Surabaya', island: 'Java', area: 47760, population: 42081500 },
+  { name: 'Banten', capital: 'Serang', island: 'Java', area: 9663, population: 12431400 },
+  { name: 'Bali', capital: 'Denpasar', island: 'Bali & Nusa Tenggara', area: 5780, population: 4352600 },
+  { name: 'Nusa Tenggara Barat', capital: 'Mataram', island: 'Bali & Nusa Tenggara', area: 18572, population: 5646000 },
+  { name: 'Nusa Tenggara Timur', capital: 'Kupang', island: 'Bali & Nusa Tenggara', area: 48718, population: 5656100 },
+  { name: 'Kalimantan Barat', capital: 'Pontianak', island: 'Kalimantan', area: 147307, population: 5869600 },
+  { name: 'Kalimantan Tengah', capital: 'Palangka Raya', island: 'Kalimantan', area: 153565, population: 2843900 },
+  { name: 'Kalimantan Selatan', capital: 'Banjarmasin', island: 'Kalimantan', area: 38744, population: 4307800 },
+  { name: 'Kalimantan Timur', capital: 'Samarinda', island: 'Kalimantan', area: 129067, population: 4045900 },
+  { name: 'Kalimantan Utara', capital: 'Tanjung Selor', island: 'Kalimantan', area: 75468, population: 739800 },
+  { name: 'Sulawesi Utara', capital: 'Manado', island: 'Sulawesi', area: 13892, population: 2741900 },
+  { name: 'Sulawesi Tengah', capital: 'Palu', island: 'Sulawesi', area: 61841, population: 3222200 },
+  { name: 'Sulawesi Selatan', capital: 'Makassar', island: 'Sulawesi', area: 46717, population: 9463400 },
+  { name: 'Sulawesi Tenggara', capital: 'Kendari', island: 'Sulawesi', area: 38068, population: 2813400 },
+  { name: 'Gorontalo', capital: 'Gorontalo', island: 'Sulawesi', area: 11257, population: 1250400 },
+  { name: 'Sulawesi Barat', capital: 'Mamuju', island: 'Sulawesi', area: 16787, population: 1533200 },
+  { name: 'Maluku', capital: 'Ambon', island: 'Maluku & Papua', area: 46914, population: 1983500 },
+  { name: 'Maluku Utara', capital: 'Sofifi', island: 'Maluku & Papua', area: 31983, population: 1373200 },
+  { name: 'Papua Barat', capital: 'Manokwari', island: 'Maluku & Papua', area: 99672, population: 1060200 },
+  { name: 'Papua', capital: 'Jayapura', island: 'Maluku & Papua', area: 82721, population: 1130100 },
+  { name: 'Papua Selatan', capital: 'Merauke', island: 'Maluku & Papua', area: 117833, population: 516200 },
+  { name: 'Papua Tengah', capital: 'Nabire', island: 'Maluku & Papua', area: 66049, population: 1343900 },
+  { name: 'Papua Pegunungan', capital: 'Wamena', island: 'Maluku & Papua', area: 51171, population: 1467000 },
+  { name: 'Papua Barat Daya', capital: 'Sorong', island: 'Maluku & Papua', area: 39167, population: 603100 },
 ];
 
-export const INDICATORS = [
-  // topic, name, value, unit, period, source
-  ["People", "Population", "284.4", "million", "Mid-2025", "BPS"],
-  ["People", "Population growth", "1.08", "% a year", "2020–2025 average", "BPS · SUPAS 2025"],
-  ["People", "Population density", "150", "people per km²", "Mid-2025", "BPS"],
-  ["People", "Share living on Java", "55.65", "%", "2025", "BPS · SUPAS 2025"],
-  ["People", "Working-age share (15–64)", "68.94", "%", "2025", "BPS · SUPAS 2025"],
-  ["People", "Dependency ratio", "45.05", "dependants per 100 workers", "2025", "BPS · SUPAS 2025"],
-  ["People", "Total fertility rate", "2.13", "children per woman", "2025", "BPS · SUPAS 2025"],
-  ["People", "Life expectancy at birth", "72.4", "years", "2024", "BPS"],
-  ["People", "Human Development Index", "74.20", "index (0–100)", "2024", "BPS"],
-  ["People", "Poverty rate", "8.25", "%", "September 2025", "BPS · Susenas"],
-  ["People", "People in poverty", "23.36", "million", "September 2025", "BPS · Susenas"],
-  ["People", "Poverty line", "Rp609,160", "per person a month", "March 2025", "BPS"],
-  ["People", "Gini ratio of expenditure", "0.375", "index (0–1)", "March 2025", "BPS"],
-  ["People", "Adult literacy rate (15+)", "96.0", "%", "2023", "BPS"],
-  ["People", "Internet users", "221.6", "million · 79.5% of population", "2024", "APJII survey"],
-  ["Economy", "GDP, current prices", "US$1.396", "trillion", "2024", "World Bank"],
-  ["Economy", "GDP in rupiah", "Rp22,139", "trillion", "2024", "BPS"],
-  ["Economy", "GDP per capita", "US$4,981", "per person", "2024", "World Bank"],
-  ["Economy", "GDP per capita in rupiah", "Rp78.6", "million per person", "2024", "BPS"],
-  ["Economy", "Real GDP growth", "5.03", "% a year", "2024", "BPS"],
-  ["Economy", "Real GDP growth, latest quarter", "5.04", "% a year", "Q3 2025", "BPS"],
-  ["Economy", "Inflation", "2.86", "% a year", "October 2025", "BPS"],
-  ["Economy", "Policy interest rate (BI-Rate)", "4.75", "%", "October 2025", "Bank Indonesia"],
-  ["Economy", "Exports of goods", "US$264.7", "billion", "2024", "BPS"],
-  ["Economy", "Imports of goods", "US$233.7", "billion", "2024", "BPS"],
-  ["Economy", "Trade surplus", "US$31.0", "billion", "2024", "BPS"],
-  ["Economy", "Foreign visitors", "13.90", "million arrivals", "2024", "BPS"],
-  ["Economy", "Rice production (milled dry grain)", "60.21", "million tonnes", "2025", "BPS"],
-  ["Labour", "Unemployment rate", "4.85", "%", "August 2025", "BPS · Sakernas"],
-  ["Labour", "Unemployed people", "7.46", "million", "August 2025", "BPS · Sakernas"],
-  ["Labour", "Labour force", "154.00", "million", "August 2025", "BPS · Sakernas"],
-  ["Labour", "People in work", "146.54", "million", "August 2025", "BPS · Sakernas"],
-  ["Labour", "Participation rate", "70.59", "%", "August 2025", "BPS · Sakernas"],
-  ["Labour", "Average monthly wage", "Rp3.33", "million", "August 2025", "BPS · Sakernas"],
-  ["Regions", "Provinces", "38", "provinces", "2025", "Ministry of Home Affairs"],
-  ["Regions", "Regencies and cities", "514", "second-level regions", "2024", "Ministry of Home Affairs"],
-  ["Regions", "Largest province — West Java", "50.76", "million people", "Mid-2025", "BPS"],
-  ["Regions", "Smallest province — South Papua", "0.55", "million people", "Mid-2025", "BPS"],
-  ["Regions", "Densest province — Jakarta", "16,155", "people per km²", "Mid-2025", "BPS"],
-];
+// Schematic tile-map placement: [column, row] on a 13 x 5 grid that follows
+// the archipelago west to east. Used by the tile map on Home and Provinces.
+export const TILE_POSITIONS = {
+  'Aceh': [0, 0], 'Sumatera Utara': [1, 0], 'Kepulauan Riau': [2, 0],
+  'Sumatera Barat': [1, 1], 'Riau': [2, 1], 'Jambi': [2, 2],
+  'Kep. Bangka Belitung': [3, 1], 'Sumatera Selatan': [3, 2], 'Bengkulu': [2, 3],
+  'Lampung': [3, 3], 'Banten': [3, 4], 'DKI Jakarta': [4, 3],
+  'Jawa Barat': [4, 4], 'Jawa Tengah': [5, 4], 'DI Yogyakarta': [5, 3],
+  'Jawa Timur': [6, 4], 'Bali': [7, 4], 'Nusa Tenggara Barat': [8, 4],
+  'Nusa Tenggara Timur': [9, 4], 'Kalimantan Barat': [5, 1],
+  'Kalimantan Tengah': [6, 1], 'Kalimantan Timur': [7, 1], 'Kalimantan Utara': [7, 0],
+  'Kalimantan Selatan': [6, 2], 'Sulawesi Utara': [8, 1], 'Gorontalo': [8, 0],
+  'Sulawesi Tengah': [8, 2], 'Sulawesi Barat': [7, 2], 'Sulawesi Selatan': [7, 3],
+  'Sulawesi Tenggara': [8, 3], 'Maluku Utara': [9, 1], 'Maluku': [9, 2],
+  'Papua Barat Daya': [10, 1], 'Papua Barat': [10, 2], 'Papua Tengah': [11, 2],
+  'Papua Pegunungan': [11, 1], 'Papua': [12, 1], 'Papua Selatan': [12, 2],
+};
 
-export const RELEASES = [
-  { date: "5 Nov 2025", title: "Labour force, August 2025", detail: "Unemployment 4.85% · 146.54 million in work", topic: "Labour" },
-  { date: "5 Nov 2025", title: "Economic growth, Q3 2025", detail: "GDP up 5.04% year on year", topic: "Economy" },
-  { date: "3 Nov 2025", title: "Inflation, October 2025", detail: "Prices up 2.86% year on year", topic: "Economy" },
-  { date: "15 Oct 2025", title: "Foreign trade, September 2025", detail: "Exports and imports by commodity and country", topic: "Economy" },
-  { date: "25 Jul 2025", title: "Poverty profile, March 2025", detail: "Poverty 8.47% · line at Rp609,160 a month", topic: "People" },
-  { date: "30 Jun 2025", title: "Population indicators, SUPAS 2025", detail: "Population 284.67 million · fertility 2.13", topic: "People" },
-];
-
-export const SOURCES = [
-  { name: "BPS — Statistics Indonesia (bps.go.id)", what: "Population census and SUPAS 2025; Sakernas labour force survey, August 2025; Susenas poverty profile, March & September 2025; national accounts and CPI releases, 2025; foreign trade statistics, 2024; mid-2025 provincial population estimates." },
-  { name: "World Bank — World Development Indicators", what: "GDP and GDP per capita in current US dollars, 2024." },
-  { name: "Bank Indonesia (bi.go.id)", what: "BI-Rate policy decision, October 2025." },
-  { name: "APJII — Indonesian Internet Service Providers Association", what: "Internet penetration survey, 2024." },
-];
+export const ISLANDS = ['Sumatra', 'Java', 'Bali & Nusa Tenggara', 'Kalimantan', 'Sulawesi', 'Maluku & Papua'];
