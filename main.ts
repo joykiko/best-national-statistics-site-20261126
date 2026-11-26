@@ -1,36 +1,68 @@
-// A working best-site-01 entry (Node 22, standard library only): the site is this directory's app/ folder, plain
-// static files a browser opens at app/index.html (ES modules, CSS, no build step), its content held in its own files:
-// nothing it runs, styles or shows loads over the network. The program hands it in: it copies app/ and screenshots/
-// from beside this file to /output and writes /output/dossier.json, the summary the judge reads (your screenshots, the
-// first load's files and bytes, and your source), with the vendored make.fun library. Leave vendor/makefun-frontend.ts
-// as it is: the scorer requires dossier.json to be byte for byte what its own copy writes.
+// DataNusa — Indonesia in Numbers: hand-in program for the make.fun
+// "best national statistics site" entry (Node 22, standard library only).
 //
-// A starting point, not a winner: a plain recipe collection, a list of recipes and a page for each. Build the site the
-// brief asks for in app/ (its content, ease of use, a phone layout, its look), put 3 or 4 PNG or JPEG screenshots of
-// it running in screenshots/ (the first by name is the cover; one may be a 390 x 844 phone view; shots.json says which
-// views this starter's were taken of), and run it.
+// What this program does, in order:
+//   1. prepares the output directory (MAKEFUN_OUTPUT_DIR locally, /output
+//      inside the grader's container),
+//   2. copies the finished static site from app/ and the QA screenshots
+//      from screenshots/ into it, untouched,
+//   3. asks the vendored make.fun library to summarise that output into
+//      dossier.json — the document the judge reads — using the scorer's
+//      own caps, and
+//   4. reads the dossier back and verifies it carries the expected schema
+//      and at least one screenshot before declaring the hand-in complete.
 //
-// Serve it locally with `node serve.ts`, then open http://localhost:8080.
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
-//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+// The site itself needs no build: app/ is plain HTML, CSS and ES modules
+// that a browser opens directly at app/index.html, and nothing it shows
+// is loaded over the network. To view it locally, run `node serve.ts`
+// and open http://localhost:8080.
+//
+// vendor/makefun-frontend.ts is the kit's library and stays exactly as
+// handed out: the scorer requires dossier.json to be byte for byte what
+// its own copy of that library writes.
 
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildDossier } from './vendor/makefun-frontend.ts';
+import { buildDossier, DOSSIER_SCHEMA } from './vendor/makefun-frontend.ts';
+
+// The scorer's caps, named once so the hand-in below reads plainly.
+// text_max_bytes is the only one that shapes the dossier's bytes; the
+// rest make this program refuse, up front, an entry the scorer would
+// refuse anyway (too many screenshots, one screenshot over 256 KiB,
+// an app/ tree past 993 entries or 16 MiB).
+const CAPS = {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  app_max_files: 993,
+  app_max_bytes: 16777216,
+};
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
+// Steps 1 and 2: a clean output directory holding the site and the shots.
 mkdirSync(out, { recursive: true });
 cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
 mkdirSync(join(out, 'screenshots'), { recursive: true });
-if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
+if (existsSync(join(here, 'screenshots'))) {
+  cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
+}
 
-// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the bytes; the others refuse an entry the
-// scorer would refuse (more than 4 screenshots or one over 256 KiB; more than 993 files and directories in app/ or
-// 16 MiB of app files: app/ counts beside /output's own 1000-entry cap, its screenshots/ and dossier.json).
-writeFileSync(
-  join(out, 'dossier.json'),
-  buildDossier(out, { text_max_bytes: 163840, screenshots: { max: 4, max_bytes: 262144 }, app_max_files: 993, app_max_bytes: 16777216 }),
-);
+// Step 3: the dossier, written with the vendored library and the caps above.
+const dossierPath = join(out, 'dossier.json');
+writeFileSync(dossierPath, buildDossier(out, CAPS));
+
+// Step 4: verify what was written before calling the hand-in done. The
+// dossier is JSON whose schema field names its format; a hand-in whose
+// summary cannot be read back, names another schema, or holds no
+// screenshot is a failed hand-in, and this program says so out loud.
+const written = JSON.parse(readFileSync(dossierPath, 'utf8'));
+if (written.schema !== DOSSIER_SCHEMA) {
+  throw new Error(`dossier schema mismatch: got ${written.schema}, want ${DOSSIER_SCHEMA}`);
+}
+const images = Array.isArray(written.images) ? written.images.length : 0;
+if (images < 1) {
+  throw new Error('dossier holds no screenshots: screenshots/ must carry 3 or 4 JPG or PNG views');
+}
+console.log(`DataNusa hand-in complete: dossier.json (${images} screenshots, schema ${written.schema})`);
